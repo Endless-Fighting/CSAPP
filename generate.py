@@ -14,7 +14,7 @@ import templates
 from sa_tag import Tag
 
 # maximum number of variable names
-MAX_NUM_VARS = 100
+MAX_NUM_VARS = 20
 # variable name template
 VAR_STR = "var_%s"
 
@@ -23,7 +23,7 @@ MIN_NUM_DUMMIES = 1
 MAX_NUM_EXAMPLES = 2
 MIN_NUM_EXAMPLES = 1
 
-MAX_INT = 100
+MAX_INT = 10
 
 # the number of bytes in each hash filename
 FNAME_HASHLEN = 5
@@ -67,7 +67,7 @@ def main(args):
 
     mutex_example_gens = [gen_race_cond_example, gen_cond_wait_example, gen_cond_signal_example, ]
     example_gens = [gen_mem_example, gen_strcpy_example]
-    dummy_gens = [gen_mem_dummy, gen_control_flow_dummy]
+    dummy_gens = [gen_mem_dummy, gen_control_flow_dummy, gen_ordinary_dummy]
 
     while inst_num < num_instances:
         # generate example
@@ -308,6 +308,20 @@ def gen_control_flow_dummy(var_list):
     lines = [string.Template(itm).substitute(substitutions) for itm in lines]
 
     return [dec_lines]+[lines], [dec_tags]+[tags]
+
+
+def gen_ordinary_dummy(var_list):
+    init_num = random.randrange(0, MAX_INT)
+    substitutions = {
+        'var': var_list.pop(),
+        'init_num': init_num,
+    }
+    lines = random.sample(templates.ORDINARY_LINES, 1)
+    lines = [string.Template(itm).substitute(substitutions) for itm in lines]
+    tags = [Tag.BODY]
+
+    return [lines], [tags]
+
 
 # def gen_race_cond_dummy(var_list):
 #     int_num = random.randint(0, MAX_INT)

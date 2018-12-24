@@ -27,6 +27,13 @@ CONTROL_FLOW_LINES = [
 ]
 
 
+# ORDINARY -------------------
+ORDINARY_LINES = [
+    'int $var = rand();',
+    'const int $var = $init_num;',
+]
+
+
 # MEM --------------------------------
 PTR_ACCESS_LINES = ["*$ptr_var = $int_num;"]
 
